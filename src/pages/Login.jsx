@@ -1,11 +1,13 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import axios from "../api/axios";
 import { useNavigate } from "react-router-dom";
+import { AuthContext } from "../context/AuthContext";
 
 const Login = () => {
   const [credentials, setCredentials] = useState({ email: "", password: "" });
   const [error, setError] = useState("");
   const navigate = useNavigate();
+  const { setAuth } = useContext(AuthContext); 
 
   const handleChange = (e) => {
     setCredentials((prev) => ({
@@ -26,6 +28,7 @@ const Login = () => {
 
       localStorage.setItem("token", token);
       localStorage.setItem("user", JSON.stringify(user));
+      setAuth({ token, user });
 
       if (user.role === "admin") {
         navigate("/admin");
